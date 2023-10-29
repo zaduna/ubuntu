@@ -1,0 +1,38 @@
+timedatectl set-timezone Asia/Jakarta
+
+apt-get install python3-certbot-apache
+certbot --apache -d sub.diaza.id
+
+nano /etc/hostname
+
+wget https://git.io/vpn -O openvpn-install.sh
+chmod +x openvpn-install.sh
+bash openvpn-install.sh
+
+wget https://install.speedtest.net/ooklaserver/ooklaserver.sh
+chmod a+x ooklaserver.sh
+./ooklaserver.sh install
+./ooklaserver.sh start
+
+# nano /etc/netplan/00-installer-config.yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens18:
+      nameservers:
+        addresses:
+        - 8.8.8.8
+  vlans:
+      vlan140:
+           id: 140
+           link: ens18
+           addresses:
+           - 1172.16.1.2/30
+           gateway4: 172.16.1.1
+           nameservers:
+             addresses:
+             - 8.8.8.8
+             - 1.1.1.1
+  version: 2
+
+# netplan apply
